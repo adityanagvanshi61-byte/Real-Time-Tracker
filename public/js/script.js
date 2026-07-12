@@ -1,3 +1,4 @@
+console.log('script.js loading');
 const socket=io();
  if(navigator.geolocation){
     navigator.geolocation.watchPosition((position)=>{
@@ -14,7 +15,7 @@ const socket=io();
 );
 }
 
-const map = L.map("map").setView([0, 0], 10);
+const map = L.map("map").setView([0, 0], 20);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
@@ -23,7 +24,8 @@ const markers={};
 
 socket.on('locationUpdate', (data) => {
     const {id, lat, long} = data;
-    map.setView([lat, long], 10);
+    console.log('locationUpdate', data);
+    map.setView([lat, long], 18);
     if(markers[id]){
         markers[id].setLatLng([lat, long]);
     } else{

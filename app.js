@@ -9,9 +9,21 @@ const compression = require('compression');
 const server = http.createServer(app);
 const io = socketio(server);
 
-
 app.set('view engine', 'ejs');
-app.use(helmet());
+app.set('trust proxy', 1);
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "https://unpkg.com"],
+            styleSrc: ["'self'", "https://unpkg.com", "'unsafe-inline'"],
+            imgSrc: ["'self'", "data:", "https://*.tile.openstreetmap.org", "https://*.openstreetmap.org", "https://unpkg.com"],
+            connectSrc: ["'self'", "ws:", "wss:"],
+            fontSrc: ["'self'", "https://unpkg.com"],
+            objectSrc: ["'none'"],
+        }
+    }
+}));
 app.use(compression());
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: '1d' }));
 
