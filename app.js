@@ -3,13 +3,17 @@ const app= express();
 const path= require('path');
 const http = require('http');
 const socketio = require('socket.io');
+const helmet = require('helmet');
+const compression = require('compression');
 
 const server = http.createServer(app);
 const io = socketio(server);
 
 
 app.set('view engine', 'ejs');
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(helmet());
+app.use(compression());
+app.use(express.static(path.join(__dirname, 'public'), { maxAge: '1d' }));
 
 io.on('connection', function(socket) {
     socket.on('sendLocation', (data) => {
